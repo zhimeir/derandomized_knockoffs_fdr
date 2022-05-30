@@ -17,7 +17,7 @@ set.seed(seed)
 class <- "PI"
 drug <- "LPV"
 alpha <- 0.1
-M <- 50         # number of knockoffs
+M <- 100         # number of knockoffs
 
 ######################
 ### load libraries ###
@@ -63,8 +63,6 @@ for(m in 1:M){
 
   ## vanilla knockoffs
   tau <- knockoff.threshold(W, fdr = alpha, offset = 1)
-  rej <- sum(W >= tau)
-  all_rej <- c(all_rej, rej)
   
   discoveries <- data.frame(rej = which(W >= tau))
   out_dir <- sprintf("../results/vanilla_%d.txt", m)
@@ -87,27 +85,9 @@ if(id > 0){
   rej <- NULL
 }
 
-## save the derandomized knockoffs results 
-## mutations <- colnames(X)[rej]
-## mutations <- substr(mutations,3,5)
-## discoveries <- data.frame(mutations = mutations)
 
-## out_dir <- sprintf("../results/discoveries_%d.txt", seed)
 rej <- data.frame(rej = rej)
 out_dir <- sprintf("../results/multiple_%d.txt", seed)
 write_delim(rej, out_dir, delim = " ")
 
-## plot the model-X knockoffs boxplot
-## data_rej <- data.frame(index = 1:M, rej = all_rej, 
-##                        method = "Model-X knockoffs")
-## pp <- ggplot(data_rej, aes(x = method, y = rej)) + 
-##   geom_boxplot() +
-##   theme_bw() +
-##   ylab("Number of discoveries") +
-##   xlab("") + 
-##   theme_font 
-## 
-## save_dir <- "~/Dropbox/Rina/multiple_knockoffs_fdr/paper/figs"
-## ggsave(sprintf("%s/application_boxplot.pdf", save_dir), 
-##        pp, width = 4, height = 3.5)
 

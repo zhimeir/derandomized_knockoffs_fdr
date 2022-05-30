@@ -71,7 +71,7 @@ Note that it may take a long time to run all the repetitions locally.
 It is recommended to run the batch mode on a server parallelly.
 
 
-### Acknowledgement
+## Acknowledgement
 The code to implement the [multi-environment knockoff filter (MEKF)](https://academic.oup.com/biomet/advance-article-abstract/doi/10.1093/biomet/asab055/6415825?redirectedFrom=fulltext&login=false)
 is adapted from [https://github.com/lsn235711/MEKF_code](https://github.com/lsn235711/MEKF_code).
 
