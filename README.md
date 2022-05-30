@@ -3,10 +3,10 @@ The repository contains code for reproducing the numerical results in the paper 
 
 ## Overview
 We develop a method for derandomzing the model-X knockoffs procedure 
-([Cand\`{e}s et al. 2018](https://candes.su.domains/publications/downloads/MX_Knockoffs.pdf))
+([Cand\`es et al. 2018](https://candes.su.domains/publications/downloads/MX_Knockoffs.pdf))
 with provable false discovery rate (FDR) control. The code in this directory 
-contains the code to reproduce simulation results in Section 4 and the Appendix,
-and the data analysis applied to the HIV dataset from the 
+contains the code to reproduce simulation results in Section 4 and the Appendix D,
+and the data analysis of the HIV dataset from the 
 [HIV Drug Resistance Database](https://hivdb.stanford.edu/download/GenoPhenoDatasets/PI_DataSet.txt).
 
 All the scripts are written in [R](https://www.r-project.org/) (version 4.0.3).
@@ -18,5 +18,6 @@ be installed: [tidyverse](https://www.tidyverse.org/),
 [adaptiveKnockoff](https://github.com/zhimeir/adaptiveKnockoffs).
 
 ## Folders
+`simulations` contains the R scripts to reproduce the simulation results.
 
 
