@@ -34,12 +34,28 @@ be installed: [tidyverse](https://www.tidyverse.org/),
 ### A single run
 To run `simulation_linear.R`, `simulation_binom.R`, `simulation_highdim.R`, `simulation_multi.R` or `simulation_sideinfo.R`,
 one needs to specify the signal amplitude and the random seed. For example,
-if we want to run `simulation_binom.R` with `seed=1` and signal amplitude `A=16`,
+if we want to run `simulation_linear.R` with `seed=1` and signal amplitude `A=4.5`,
 we can run the following command in terminal:
 ```{r}
 cd simulations
-Rscript simulation_binom.R 1 16
+Rscript simulation_binom.R 1 4.5
 ```
+To run `simulation_linear_pfer.R`, we need to specify the random seed, 
+the signal amplitude and the parameter v. For instance, if using 
+`seed=1,A=4.5,v=2`, we can execute the following command in terminal:
+```{r}
+cd simulations
+Rscript simulation_linear_pfer.R 1 4.5 2
+```
+
+To run `simulation_linear_robust.R`, we need to specify the random seed, 
+the signal amplitude and the number of unlabelled samples. For instance, if using 
+`seed=1,A=4.5,N=600`, we can execute the following command in terminal:
+```{r}
+cd simulations
+Rscript simulation_linear_robust.R 1 4.5 600
+```
+
 
 ### Multiple runs
 The simulation results presented in the paper are averaged over multiple runs. 
@@ -54,4 +70,8 @@ bash run_simulation_binom.sh
 Note that it may take a long time to run all the repetitions locally.
 It is recommended to run the batch mode on a server parallelly.
 
+
+### Acknowledgement
+The code to implement the [multi-environment knockoff filter (MEKF)](https://academic.oup.com/biomet/advance-article-abstract/doi/10.1093/biomet/asab055/6415825?redirectedFrom=fulltext&login=false)
+is adapted from [https://github.com/lsn235711/MEKF_code](https://github.com/lsn235711/MEKF_code).
 

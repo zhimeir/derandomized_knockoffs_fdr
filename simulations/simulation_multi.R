@@ -2,15 +2,15 @@
 ## Start of problem independent section
 args <- commandArgs(trailingOnly = TRUE)
 seedA <- as.integer(args[1])
-amp <- as.integer(args[2])
+amp <- as.numeric(args[2])
 
 suppressPackageStartupMessages(library(glmnet))
 suppressPackageStartupMessages(library(knockoff))
 suppressPackageStartupMessages(library(tidyverse))
-source("utils.R")
-source("MEKF/functions_multienv.R")
-source("MEKF/accumulation_test_functions.R")
-source("MEKF/importance_stats.R")
+source("../utils/utils.R")
+source("../utils/MEKF/functions_multienv.R")
+source("../utils/MEKF/accumulation_test_functions.R")
+source("../utils/MEKF/importance_stats.R")
 
 ## The directory to save the results
 save_dir <- sprintf("../results/simulation_multienv")
@@ -36,7 +36,7 @@ y.sample <- list()
 nonzero[[1]] <- 1:k
 nonzero[[2]] <- 1:(k+10)
 for(i in 1:nenv){
-  beta_true[[i]] <- amp * (1:p %in% nonzero[[i]]) * sign(rnorm(p)) / 2 /sqrt(n)
+  beta_true[[i]] <- amp * (1:p %in% nonzero[[i]]) * sign(rnorm(p)) /sqrt(n)
   y.sample[[i]] <- function(X) X %*% beta_true[[i]] + rnorm(n)
 }
 
@@ -78,10 +78,10 @@ for(seedB in 1:nrep){
   ## Derandomized Knockoffs
   res <- multienv_ekn(Xlist, Ylist, nenv, M, 
              alpha, alpha / 2, Sigma, 
-             diags, family = "binomial", offset = 1)
+             diags, family = "gaussian", offset = 1)
   rej <- res$rej
   fdp <- sum(beta_true[[1]][rej]==0) / max(length(rej), 1)
-  power <- sum(beta_true[[1]][rej]!=0) / max(k,1)
+  power <- sum(beta_true[[1]][rej]!=0) / k
   mkn_res <- data.frame(method = "multiple", power = power, fdp = fdp, seed = seed)
   set$mkn[rej] <- set$mkn[rej] + 1
 
@@ -90,8 +90,8 @@ for(seedB in 1:nrep){
 }
 
 
-out_dir <- sprintf("%s/res_amp_%d_seedA_%d.csv", save_dir, amp, seedA)
+out_dir <- sprintf("%s/res_amp_%.1f_seedA_%d.csv", save_dir, amp, seedA)
 write_csv(all_res, out_dir)
 
-out_dir <- sprintf("%s/res_amp_%d_seedA_%d_set.csv", save_dir, amp, seedA)
+out_dir <- sprintf("%s/res_amp_%.1f_seedA_%d_set.csv", save_dir, amp, seedA)
 write_csv(set, out_dir)

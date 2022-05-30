@@ -2,16 +2,16 @@
 ## Start of problem independent section
 args <- commandArgs(trailingOnly = TRUE)
 seedA<- as.integer(args[1])
-amp <- as.integer(args[2])
+amp <- as.numeric(args[2])
 n_ex <- as.integer(args[3])
 if(is.na(seedA)) seedA <- 1
-if(is.na(amp)) amp <- 5
+if(is.na(amp)) amp <- 4.5
 if(is.na(n_ex)) n_ex <- 500
 
 suppressPackageStartupMessages(library(glmnet))
 suppressPackageStartupMessages(library(knockoff))
 suppressPackageStartupMessages(library(tidyverse))
-source("utils.R")
+source("../utils/utils.R")
 
 ## The directory to save the results
 save_dir <- sprintf("../results/simulation_linear_robust")
@@ -29,8 +29,8 @@ rho <- 0.5
 M <- 50
 Sigma <- toeplitz(rho^(0:(p-1)))
 nonzero <- seq(1, p, by = 2)
-beta_true <- amp * (1:p %in% nonzero) / 2 / sqrt(n)
-beta_true[seq(3, p, by = 4)] <- -beta_true[seq(3, p, by = 4)]
+beta_true <- amp * (1:p %in% nonzero) / sqrt(n)
+beta_true[seq(3, p, by = 4)] <- - beta_true[seq(3, p, by = 4)]
 y.sample <- function(X) X %*% beta_true + rnorm(n)
 diags <- knockoff::create.solve_asdp(Sigma)
 nrep <- 5
@@ -71,6 +71,6 @@ for(seedB in 1:nrep){
   all_res <- rbind(all_res, vkn_res, mkn_res)
 }
 
-out_dir <- sprintf("%s/res_amp_%d_seedA_%d_n_%d.csv", save_dir, amp, seedA, n_ex)
+out_dir <- sprintf("%s/res_amp_%.1f_seedA_%d_n_%d.csv", save_dir, amp, seedA, n_ex)
 write_csv(all_res, out_dir)
 

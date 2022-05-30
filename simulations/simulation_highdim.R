@@ -4,12 +4,12 @@ args <- commandArgs(trailingOnly = TRUE)
 seedA<- as.integer(args[1])
 amp <- as.integer(args[2])
 if(is.na(seedA)) seedA <- 1
-if(is.na(amp)) amp <- 5
+if(is.na(amp)) amp <- 10
 
 suppressPackageStartupMessages(library(glmnet))
 suppressPackageStartupMessages(library(knockoff))
 suppressPackageStartupMessages(library(tidyverse))
-source("utils.R")
+source("../utils/utils.R")
 
 ## The directory to save the results
 save_dir <- sprintf("../results/simulation_highdim")
@@ -49,22 +49,21 @@ for(seedB in 1:nrep){
   xk_seed <- 100 + (seedA - 1) * nrep + seedB
   set.seed(xk_seed)
 
-  cat(seedB)
   ## Vanilla  knockoff
   Xk <- create.gaussian(X, rep(0,p), Sigma, diag_s = diags)
   W <- stat.glmnet_coefdiff(X, Xk, Y)
   tau <- knockoff.threshold(W, fdr = alpha, offset = 1)
   rej <- which(W >= tau)
   fdp <- sum(beta_true[rej]==0) / max(length(rej), 1)
-  power <- sum(beta_true[rej]!=0)/max(k,1)
+  power <- sum(beta_true[rej]!=0) / k
   vkn_res <- data.frame(method = "vanilla", power = power, fdp = fdp, seedB = seedB)
   set$vkn[rej] <- set$vkn[rej] + 1
 
   ## FDR-derandomized knockoffs
-  res <- ekn(X, Y, M, alpha, alpha / 2, Sigma, diags, "gaussian",offset = 1)
+  res <- ekn(X, Y, M, alpha, alpha / 2, Sigma, diags, "gaussian", offset = 1)
   rej <- res$rej
   fdp <- sum(beta_true[rej]==0) / max(length(rej), 1)
-  power <- sum(beta_true[rej]!=0) / max(k,1)
+  power <- sum(beta_true[rej]!=0) / k
   mkn_res <- data.frame(method = "multiple", power = power, fdp = fdp, seedB = seedB)
   set$mkn[rej] <- set$mkn[rej] + 1
 
@@ -72,6 +71,7 @@ for(seedB in 1:nrep){
   all_res <- rbind(all_res, vkn_res, mkn_res)
 }
 
+## Save the outcome
 out_dir <- sprintf("%s/res_amp_%d_seedA_%d.csv", save_dir, amp, seedA)
 write_csv(all_res, out_dir)
 

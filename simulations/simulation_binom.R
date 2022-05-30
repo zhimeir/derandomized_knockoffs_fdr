@@ -4,12 +4,12 @@ args <- commandArgs(trailingOnly = TRUE)
 seedA<- as.integer(args[1])
 amp <- as.integer(args[2])
 if(is.na(seedA)) seedA <- 1
-if(is.na(amp)) amp <- 5
+if(is.na(amp)) amp <- 16
 
 suppressPackageStartupMessages(library(glmnet))
 suppressPackageStartupMessages(library(knockoff))
 suppressPackageStartupMessages(library(tidyverse))
-source("utils.R")
+source("../utils/utils.R")
 
 ## The directory to save the results
 save_dir <- sprintf("../results/simulation_binom")
@@ -51,7 +51,7 @@ for(seedB in 1:nrep){
   tau <- knockoff.threshold(W, fdr = alpha, offset = 1)
   rej <- which(W >= tau)
   fdp <- sum(beta_true[rej]==0) / max(length(rej), 1)
-  power <- sum(beta_true[rej]!=0) / max(k,1)
+  power <- sum(beta_true[rej]!=0) / k
   vkn_res <- data.frame(method = "vanilla", power = power, fdp = fdp, seedB = seedB)
   set$vkn[rej] <- set$vkn[rej] + 1
 
@@ -59,7 +59,7 @@ for(seedB in 1:nrep){
   res <- ekn(X, Y, M, alpha, alpha / 2, Sigma, diags, family = "binomial", offset = 1)
   rej <- res$rej
   fdp <- sum(beta_true[rej]==0) / max(length(rej), 1)
-  power <- sum(beta_true[rej]!=0) / max(k,1)
+  power <- sum(beta_true[rej]!=0) / k
   mkn_res <- data.frame(method = "multiple", power = power, fdp = fdp, seedB = seedB)
   set$mkn[rej] <- set$mkn[rej] + 1
 
