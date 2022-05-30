@@ -31,66 +31,6 @@ ekn <- function(X, Y, M, alpha, gamma, Sigma, diags,
 }
 
 
-boost_ekn <- function(X, Y, M, alpha, gamma, diags, offset = 0, one_var = TRUE){
-
-  n <- dim(X)[1]
-  p <- dim(X)[2]
-
-  E <- matrix(0, M, p)
-
-  for(m in 1:M){
-
-    Xk <- create.gaussian(X, rep(0,p), Sigma, diag_s = diags)
-    mdl <- cv.glmnet(cbind(X, Xk), Y, alpha=1)
-    cvlambda <- mdl$lambda.min
-    beta_hat <- mdl$glmnet.fit$beta[,mdl$lambda ==mdl$lambda.min]
-    T <- abs(beta_hat[1:p])
-    T_tilde <- abs(beta_hat[(p+1):(2*p)])
-    W <- T-T_tilde
-
-    ## Test different threshold
-    tau <- knockoff.threshold(W, fdr =  gamma, offset = offset)
-    E[m,] <- (W >= tau) / (1 + sum(W <= -tau))
-
-  }
-
-  E <- colMeans(E)
-  if(one_var){
-    U <- runif(1)
-  }else{
-    U <- runif(p)
-  }
-  E <- E / U
-  E_ord <- order(E, decreasing = TRUE)
-  E <- sort(E, decreasing = TRUE)
-  comp <- E >= (1 / alpha / (1:p))
-  id <- max(which(comp > 0))
-  if(id > 0){
-    rej <- E_ord[1:id]
-  }else{
-    rej <- NULL
-  }
-
-  return(list(rej = rej, E = E))
-
-}
-
-compute_mmi_s <- function(Sigma){
-  p <- dim(Sigma)[1]
-  ones <- rep(1,p)
-  s <- Variable(p)
-  
-    obj <- Maximize(t(ones)%*%log(s)+log_det(2*Sigma-diag(s)))
-    constraints <- list(
-      s>=0,
-      2*Sigma-diag(s)>=0
-    )
-    prob <- Problem(obj, constraints)
-    res <- psolve(prob,solver = "SCS")
-    s <- as.vector(res$getValue(s))
-  return(s)  
-}
-
 
 weighted_ekn <- function(X, Y, M, alpha, gamma, weight, 
                          Sigma, diags, offset = 1, family = "gaussian"){
