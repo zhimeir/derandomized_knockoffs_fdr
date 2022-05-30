@@ -19,29 +19,39 @@ be installed: [tidyverse](https://www.tidyverse.org/),
 
 ## Folders
 - `/simulations` contains the executable R scripts to reproduce the simulation results.
-  * `simulation_linear.R` generates (one run of) the results corresponding to the Gaussian linear model simulation setup in Section 4.
-  * `simulation_binom.R` generates (one run of) the results corresponding to the logistic model simulation setup in Section 4.
-  * `simulation_highdim.R` generates (one run of) the results corresponding to the high-dimensional simulation setup in Appendix D1.
-  * `simulation_linear_pfer.R` generates (one run of) the results corresponding to comparison with the PFER version in Appendix D2.
-  * `simulation_linear_robust.R` generates (one run of) the results corresponding to simulation with imperfect knowledge of X distribution in Appendix D3. 
-  * `simulation_multi.R` generates (one run of) the results corresponding to the multi-environment simulation setup in Appendix D4.
-  * `simulation_sideinfo.R` generates (one run of) the results corresponding to setting with side informatino in Appendix D5.
-- `/real_data` contains the code to reproduce the results in Section 5.
+  * `simulation_linear.R` reproduces the simulation results from the Gaussian linear model in Section 4.
+  * `simulation_binom.R` reproduces the simulation results from the logistic mode in Section 4.
+  * `simulation_highdim.R` reproduces the simulation results from the high-dimensional model in Appendix D1.
+  * `simulation_linear_pfer.R` reproduces the comparison with the PFER version in Appendix D2.
+  * `simulation_linear_robust.R` reproduces the simulation with imperfect knowledge of X distribution in Appendix D3. 
+  * `simulation_multi.R` reproduces the results from the multi-environment simulation in Appendix D4.
+  * `simulation_sideinfo.R` reproduces the the results from the setting with side informatino in Appendix D5.
+- `/real_data` contains the R script `knockoffs.R` to reproduce the real data analysis in Section 5.
 - `/data` contains the preprocessed HIV datasets.
-- `/utils` contains core functions to implement the methods.
+- `/utils` contains the core functions to implement the methods.
 
 ## Usage
 ### A single run
 To run `simulation_linear.R`, `simulation_binom.R`, `simulation_highdim.R`, `simulation_multi.R` or `simulation_sideinfo.R`,
 one needs to specify the signal amplitude and the random seed. For example,
-if we want to run `simulation_binom.R` with random seed 1 and signal amplitude 19,
+if we want to run `simulation_binom.R` with `seed=1` and signal amplitude `A=16`,
 we can run the following command in terminal:
 ```{r}
 cd simulations
-Rscript simulation_binom.R 1 19
+Rscript simulation_binom.R 1 16
 ```
 
 ### Multiple runs
-
+The simulation results presented in the paper are averaged over multiple runs. 
+The bash files in the folder `/batch` call the desired functions in the batch 
+mode. For example, if we want to run `simulation_binom.R` with signal amplitudes
+`A={16,19,22,25,28}` and `seed={1,2,...,100}`, we can run the following commands
+in terminal
+```{r}
+cd batch
+bash run_simulation_binom.sh
+```
+Note that it may take a long time to run all the repetitions locally.
+It is recommended to run the batch mode on a server parallelly.
 
 
