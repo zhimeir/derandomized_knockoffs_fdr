@@ -5,7 +5,7 @@ The repository contains code for reproducing the numerical results in the paper 
 We develop a method for derandomzing the model-X knockoffs procedure 
 ([Candès et al. 2018](https://candes.su.domains/publications/downloads/MX_Knockoffs.pdf))
 with provable false discovery rate (FDR) control. The code in this directory 
-contains the code to reproduce simulation results in Section 4 and the Appendix D,
+reproduces simulation results in Section 4 and Section D of the Appendix,
 and the data analysis of the HIV dataset from the 
 [HIV Drug Resistance Database](https://hivdb.stanford.edu/download/GenoPhenoDatasets/PI_DataSet.txt).
 
