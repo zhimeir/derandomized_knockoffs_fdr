@@ -42,7 +42,7 @@ Rscript simulation_binom.R 1 4.5
 ```
 To run `simulation_linear_pfer.R`, we need to specify the random seed, 
 the signal amplitude and the parameter v. For instance, if using 
-`seed=1,A=4.5,v=2`, we can execute the following command in terminal:
+`seed=1,A=4.5,v=2`, we can execute the following command in the terminal:
 ```{r}
 cd simulations
 Rscript simulation_linear_pfer.R 1 4.5 2
@@ -62,7 +62,7 @@ The simulation results presented in the paper are averaged over multiple runs.
 The bash files in the folder `/batch` call the desired functions in the batch 
 mode. For example, if we want to run `simulation_binom.R` with signal amplitudes
 `A={16,19,22,25,28}` and `seed={1,2,...,100}`, we can run the following commands
-in terminal
+in the terminal:
 ```{r}
 cd batch
 bash run_simulation_binom.sh
