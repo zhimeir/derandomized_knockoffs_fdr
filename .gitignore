@@ -41,4 +41,4 @@ vignettes/*.pdf
 .Renviron
 
 # batch file 
-./server
+/server
