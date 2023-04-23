@@ -40,4 +40,5 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
-
+# batch file 
+./server

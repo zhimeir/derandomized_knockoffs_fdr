@@ -104,15 +104,13 @@ kn_evals <- function(stat_mat, gamma, offset){
 ###   X: a n-by-p covariate matrix of covariates 
 ###   Y: a vector of responses of length n 
 ###   M: the number of knokcoff realizations 
-###   alpha: alpha_ebh 
 ###   gamma: alpha_kn
 ###   mu: mean under PX
 ###   Sigma: covariance matrix under PX 
 ###   diags: the diagonal elements for knockoffs construction 
 ### Output: 
 ###   E: the list of knockoff e-values 
-ekn <- function(X, Y, M, 
-                alpha, gamma, 
+ekn <- function(X, Y, M, gamma, 
                 mu, Sigma, diags, 
                 family = "gaussian", offset = 1){
 
