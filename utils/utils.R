@@ -122,7 +122,7 @@ ekn <- function(X, Y, M, gamma,
   for(m in 1:M){
     Xk <- create.gaussian(X, mu, Sigma, diag_s = diags)
     W <- stat.glmnet_coefdiff(X, Xk, Y, family = family)
-    tau <- stop_early(W, gamma_list[1], offset) 
+    tau <- stop_early(W, gamma, offset) 
     E[m,] <- (W >= tau) / (1 + sum(W <= -tau))
 
   }
