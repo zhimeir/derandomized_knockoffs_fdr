@@ -9,7 +9,7 @@ if(is.na(amp)) amp <- 30
 suppressPackageStartupMessages(library(glmnet))
 suppressPackageStartupMessages(library(knockoff))
 suppressPackageStartupMessages(library(tidyverse))
-source("utils.R")
+source("../utils/utils.R")
 
 ## The directory to save the results
 save_dir <- sprintf("../results/simulation_highdim")
@@ -69,7 +69,7 @@ for(seedB in 1:nrep){
   power <- sum(beta_true[rej]!=0) / k
   all_res <- rbind(all_res,
     data.frame(method = "multiple", power = power, fdp = fdp, seedB = seedB))
-  set$mknn[rej] <- set$mkn[rej] + 1
+  set$mkn[rej] <- set$mkn[rej] + 1
 
 }
 
