@@ -1,0 +1,11 @@
+method,power,fdp,seed
+vanilla,0.96,0.04,51
+multiple,0.98,0.02,51
+vanilla,0.98,0.15517241379310345,52
+multiple,0.98,0.0392156862745098,52
+vanilla,0.96,0.25,53
+multiple,0.94,0.0784313725490196,53
+vanilla,0.8,0,54
+multiple,0.96,0,54
+vanilla,0.98,0.0392156862745098,55
+multiple,0.94,0,55
