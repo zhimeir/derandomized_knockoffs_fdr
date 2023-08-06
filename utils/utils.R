@@ -248,6 +248,36 @@ return(list(rej = rej))
 }
 
 
+pfer <- function(stat_mat, v0, thres){
+
+  M <- nrow(stat_mat)
+  p <- ncol(stat_mat)
+  
+  freq <- rep(0, p)
+  for (m in 1:M){
+    v <- floor(v0)+rbinom(1,1,v0-floor(v0))
+    W <- stat_mat[m,]
+    order_w <- order(abs(W),decreasing = TRUE)
+    sorted_w <- W[order_w]
+    negid <- which(sorted_w<0)
+    if(v>0){
+      if(sum(W<0)<v){
+        S <- which(W>0)
+        freq[S] <- freq[S]+1
+      }else{
+        TT <- negid[v]
+        S <- which(sorted_w[1:TT]>0)
+        S <- order_w[S]
+        freq[S] <- freq[S]+1
+        }
+      }
+  }
+  freq <- freq / M
+  S <- which(freq >= thres)
+
+return(list(rej = S, freq = freq))
+}
+
 multienv_ekn <- function(Xlist, Ylist, nenv, 
                          M, alpha, gamma, mu, Sigma, diags, 
                          family = "gaussian", offset = 1){
