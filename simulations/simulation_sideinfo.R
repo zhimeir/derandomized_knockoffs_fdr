@@ -9,7 +9,7 @@ suppressPackageStartupMessages(library(gam))
 suppressPackageStartupMessages(library(knockoff))
 suppressPackageStartupMessages(library(adaptiveKnockoff))
 suppressPackageStartupMessages(library(tidyverse))
-source("utils.R")
+source("../utils/utils.R")
 
 ## The directory to save the results
 save_dir <- sprintf("../results/simulation_sideinfo")
@@ -25,6 +25,7 @@ k <- 50
 alpha <- 0.1
 rho <- 0.5
 M <- 50
+mu <- rep(0,p)
 Sigma <- toeplitz(rho^(0:(p-1)))
 nonzero <- 1:k
 beta_true <- amp / 10 * (1:p %in% nonzero) / sqrt(n)
@@ -39,7 +40,7 @@ X <- matrix(rnorm(n * p),n) %*% chol(Sigma)
 Y <- y.sample(X)
   
 ## Vanilla  knockoff
-Xk <- create.gaussian(X, rep(0,p), Sigma, diag_s = diags)
+Xk <- create.gaussian(X, mu, Sigma, diag_s = diags)
 W <- stat.glmnet_coefdiff(X, Xk, Y, family = "gaussian")
 tau <- knockoff.threshold(W, fdr = alpha, offset = 1)
 rej <- which(W >= tau)
@@ -56,7 +57,8 @@ akn_res <- data.frame(method = "adaptive", power = power, fdp = fdp, seed = seed
 
 ## Derandomized knockoffs
 weight <- exp(-(1:p))
-res <- weighted_ekn(X, Y, M, alpha, alpha/2, weight, Sigma, diags)
+res <- weighted_ekn(X, Y, M, alpha, alpha/2, 
+                    weight, mu, Sigma, diags)
 rej <- res$rej
 fdp <- sum(beta_true[rej]==0) / max(length(rej), 1)
 power <- sum(beta_true[rej]!=0) / k
@@ -65,10 +67,9 @@ wmkn_res <- data.frame(method = "weighted_multiple",
 
 
 ## Derandomized knockoffs
-E <- ekn(X, Y, M, alpha / 2, Sigma, diags, 
-           family = "gaussian", offset = 1)$E_early
-res <- ebh(E, alpha)
-rej <- res$rej
+E <- ekn(X, Y, M, alpha / 2, mu, Sigma, diags, 
+           family = "gaussian", offset = 1)$E
+rej <- ebh(E, alpha)$rej
 fdp <- sum(beta_true[rej]==0) / max(length(rej), 1)
 power <- sum(beta_true[rej]!=0) / k
 mkn_res <- data.frame(method = "multiple", 
