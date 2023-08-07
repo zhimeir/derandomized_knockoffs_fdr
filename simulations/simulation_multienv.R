@@ -7,10 +7,10 @@ amp <- as.integer(args[2])
 suppressPackageStartupMessages(library(glmnet))
 suppressPackageStartupMessages(library(knockoff))
 suppressPackageStartupMessages(library(tidyverse))
-source("utils.R")
-source("MEKF/functions_multienv.R")
-source("MEKF/accumulation_test_functions.R")
-source("MEKF/importance_stats.R")
+source("../utils/utils.R")
+source("../utils/MEKF/functions_multienv.R")
+source("../utils/MEKF/accumulation_test_functions.R")
+source("../utils/MEKF/importance_stats.R")
 
 ## The directory to save the results
 save_dir <- sprintf("../results/simulation_multienv")
@@ -26,6 +26,7 @@ k <- 50
 alpha <- 0.1
 rho <- 0.5
 M <- 50
+mu <- rep(0,p)
 Sigma <- toeplitz(rho^(0:(p-1)))
 nenv <- 2
 
@@ -56,7 +57,8 @@ for (i in 1:nenv){
 ## Vanilla  knockoff
 Xklist <- list()
 for(i in 1:nenv){
-  Xklist[[i]] <- create.gaussian(Xlist[[i]], rep(0,p), Sigma, diag_s = diags)
+  Xklist[[i]] <- create.gaussian(Xlist[[i]], mu, 
+                                 Sigma, diag_s = diags)
 }
   
 W_matrix <- compute_stats_with_prior(Xlist, Xklist, Ylist)
@@ -71,7 +73,7 @@ vkn_res <- data.frame(method = "vanilla", power = power, fdp = fdp, seed = seedA
 
 ## Derandomized Knockoffs
 res <- multienv_ekn(Xlist, Ylist, nenv, M, 
-           alpha, alpha / 2, rep(0,p), Sigma, 
+           alpha, alpha / 2, mu, Sigma, 
            diags, family = "gaussian", offset = 1)
 rej <- res$rej
 fdp <- sum(beta_true[[1]][rej]==0) / max(length(rej), 1)
