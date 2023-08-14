@@ -1,0 +1,5 @@
+method,power,fdp,seed
+vanilla,0.98,0.19672131147540983,69
+adaptive,0.98,0.19672131147540983,69
+multiple,0.98,0.09259259259259259,69
+weighted_multiple,0.98,0.02,69
