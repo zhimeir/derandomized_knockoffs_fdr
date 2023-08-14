@@ -297,7 +297,7 @@ multienv_ekn <- function(Xlist, Ylist, nenv,
     W_sign <- 2*((apply(W_matrix, 1, min) > 0) - 0.5)
     W_prod <- abs(apply(W_matrix, 1, prod))
     W <- W_sign * W_prod
-    tau <- stop+early(W, gamma, offset)
+    tau <- stop_early(W, gamma, offset)
     E[m,] <- (W >= tau) / (1 + sum(W <= -tau))
 
   }
