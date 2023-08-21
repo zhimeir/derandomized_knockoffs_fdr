@@ -22,9 +22,13 @@ be installed: [tidyverse](https://www.tidyverse.org/),
   * `simulation_linear.R` reproduces the simulation results from the Gaussian linear model in Section 4.
   * `simulation_binom.R` reproduces the simulation results from the logistic mode in Section 4.
   * `simulation_highdim.R` reproduces the simulation results from the high-dimensional model in Appendix D1.
-  * `simulation_linear_pfer.R` reproduces the comparison with the PFER version in Appendix D2.
-  * `simulation_linear_robust.R` reproduces the simulation with imperfect knowledge of X distribution in Appendix D3. 
-  * `simulation_multi.R` reproduces the results from the multi-environment simulation in Appendix D4.
+  * `simulation_original_low.R` reproduces the comparison with the original knockoffs procedure under a low-dimensional setting 
+considered in [Candès et al. 2018](https://candes.su.domains/publications/downloads/MX_Knockoffs.pdf).
+  * `simulation_original_high.R` reproduces the comparison with the original knockoffs procedure under a high-dimensional setting 
+considered in [Candès et al. 2018](https://candes.su.domains/publications/downloads/MX_Knockoffs.pdf).
+  * `simulation_pfer.R` reproduces the comparison with the PFER version in Appendix D2.
+  * `simulation_robustness.R` reproduces the simulation with imperfect knowledge of X distribution in Appendix D3. 
+  * `simulation_multienv.R` reproduces the results from the multi-environment simulation in Appendix D4.
   * `simulation_sideinfo.R` reproduces the the results from the setting with side informatino in Appendix D5.
 - `/real_data` contains the R script `knockoffs.R` to reproduce the real data analysis in Section 5.
 - `/data` contains the preprocessed HIV datasets.
@@ -32,7 +36,8 @@ be installed: [tidyverse](https://www.tidyverse.org/),
 
 ## Usage
 ### A single run
-To run `simulation_linear.R`, `simulation_binom.R`, `simulation_highdim.R`, `simulation_multi.R` or `simulation_sideinfo.R`,
+To run `simulation_linear.R`, `simulation_binom.R`, `simulation_highdim.R`, 
+`simulation_original_low.R`, `simulation_original_high.R`, `simulation_multienv.R` or `simulation_sideinfo.R`,
 one needs to specify the signal amplitude and the random seed. For example,
 if we want to run `simulation_linear.R` with `seed=1` and signal amplitude `A=4.5`,
 we can run the following command in terminal:
@@ -40,20 +45,20 @@ we can run the following command in terminal:
 cd simulations
 Rscript simulation_binom.R 1 4.5
 ```
-To run `simulation_linear_pfer.R`, we need to specify the random seed, 
+To run `simulation_pfer.R`, we need to specify the random seed, 
 the signal amplitude and the parameter v. For instance, if using 
 `seed=1,A=4.5,v=2`, we can execute the following command in the terminal:
 ```{r}
 cd simulations
-Rscript simulation_linear_pfer.R 1 4.5 2
+Rscript simulation_pfer.R 1 4.5 2
 ```
 
-To run `simulation_linear_robust.R`, we need to specify the random seed, 
+To run `simulation_robustness.R`, we need to specify the random seed, 
 the signal amplitude and the number of unlabelled samples. For instance, if using 
 `seed=1,A=4.5,N=600`, we can execute the following command in terminal:
 ```{r}
 cd simulations
-Rscript simulation_linear_robust.R 1 4.5 600
+Rscript simulation_robustness.R 1 4.5 600
 ```
 
 
